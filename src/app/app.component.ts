@@ -7,6 +7,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { AppState } from './app.service';
+import Rx from 'rxjs/Rx';
 
 /*
  * App Component
@@ -32,15 +33,17 @@ export class AppComponent implements OnInit {
   public ngOnInit() {
     console.log('Initial App State', this.appState.state);
 
-    printObjects('prefix', {name: 'Tom'}, {name: 'Andy'}, {name: 'Dan'});
+    let $ = document.querySelector.bind(document);
 
-    function printObjects(prefix, ...args) {
-      args.forEach((arg) =>
-        console.log(prefix, arg.name)
-      );
-    }
+    let myInput = $('input');
+
+    let obs = Rx.Observable.fromEvent(myInput, 'input');
+
+    obs
+      .map((event) => { return event.target.value; })
+      .map((value) => { return value.toUpperCase(); })
+      .subscribe((value) => console.log(value));
   }
-
 }
 
 /*
